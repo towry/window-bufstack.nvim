@@ -84,3 +84,7 @@ branch and also on Pull Request. Tests will be run using
 [integration-runs]: https://github.com/m00qek/plugin-template.nvim/actions/workflows/integration.yml
 [neovim-test-versions]: .github/workflows/integration.yml#L17
 [help]: doc/my-awesome-plugin.txt
+
+## Mabye similar
+
+- https://github.com/wilfreddenton/history.nvim
