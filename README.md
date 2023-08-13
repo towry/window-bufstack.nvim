@@ -1,8 +1,8 @@
-# window-bufstack.nvim
+# WIP: window-bufstack.nvim
 
 [![Integration][integration-badge]][integration-runs]
 
-Get next visited buf of given window, useful for choose next buf after closing a
+WIP: Get next visited buf of given window, useful for choose next buf after closing a
 buf in a window.
 
 ## Using
