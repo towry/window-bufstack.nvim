@@ -4,25 +4,20 @@ local function init_on_vim_start()
   local bufstack = require('window-bufstack.bufstack')
   local group = vim.api.nvim_create_augroup("window_bufstack_events", { clear = true })
 
-  vim.api.nvim_create_autocmd("BufWinEnter", {
+  vim.api.nvim_create_autocmd("BufEnter", {
     group = group,
-    callback = function()
-      local buf = vim.api.nvim_get_current_buf()
-      bufstack.push(buf)
+    callback = function(args)
+      local win = vim.api.nvim_get_current_win()
+      local buf = args.buf
+      bufstack.push(buf, win)
     end,
   })
-  --- for :split without args.
-  vim.api.nvim_create_autocmd("WinEnter", {
+  vim.api.nvim_create_autocmd('BufLeave', {
     group = group,
-    callback = function(info)
-      local win = tonumber(info.match)
-      if not win then return end
-      vim.schedule(function()
-        vim.api.nvim_win_call(win, function()
-          local buf = vim.api.nvim_win_get_buf(win)
-          bufstack.push(buf, win)
-        end)
-      end)
+    callback = function(args)
+      local win = vim.api.nvim_get_current_win()
+      local buf = args.buf
+      bufstack.delete_buf(buf, win)
     end,
   })
   vim.api.nvim_create_autocmd("WinClosed", {
