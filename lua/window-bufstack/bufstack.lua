@@ -31,14 +31,18 @@ function M.delete_buf(bufnr, winid)
     winid = api.nvim_get_current_win()
   end
   local stack = session_windows[winid] or {}
+  local deleted = false
   for i, v in ipairs(stack) do
     if v == bufnr then
       table.remove(stack, i)
+      deleted = true
       break;
     end
   end
+  return deleted
 end
 
+--- FIXME: what if next is the next buf that visited.
 --- Ignore next income buffer, because it maybe being loaded into this window
 --- automatically and unwanted.
 --- For example, you can call this method before you run `:bdelete`, so the next
@@ -76,11 +80,14 @@ function M.push(bufnr, winid)
   end
   local stack = session_windows[winid]
 
-  M.delete_buf(bufnr, winid)
+  local is_deleted = M.delete_buf(bufnr, winid)
 
   local next = stack[#stack]
   if next == INVALID_BUF_ID then
-    bufnr = -(bufnr)
+    --- only replace if it has not visited before.
+    if not is_deleted then
+      bufnr = -(bufnr)
+    end
     stack[#stack] = bufnr
     return
   end
