@@ -3,6 +3,19 @@
 Get next visited buf of given window, useful for choosing next buffer after closing a
 buffer in a window.
 
+Note:
+
+1. This plugin doesn't handle buffer management like delete or restore, it just
+   record what buffer has been opened in a window.
+2. In my expectation, when I run `:vsplit` a window, and use `bdelete` to close
+   the buffer in that window, the window should be closed because it only have
+   one buffer visited it. This plugin helps to achive this workflow.
+3. When you have two same buffer opened in two window and you use `bdelete` to
+   close one of theme, you find both windows are closed, this is the behavior of
+   `bdelete`, you may want to use vim api to check if the buffer opened in
+   another window so you can use other command other than `bdelete` to remove
+   the buffer from the window.
+
 ## Using
 
 ```lua
