@@ -12,7 +12,8 @@ local function init_on_vim_start()
       bufstack.push(buf, win)
     end,
   })
-  vim.api.nvim_create_autocmd('BufLeave', {
+  -- BufUnload vs BufDelete ?
+  vim.api.nvim_create_autocmd('BufUnload', {
     group = group,
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
