@@ -1,3 +1,55 @@
-*window-bufstack.nvim*  Get next visited buf of given window.
+==============================================================================
+------------------------------------------------------------------------------
+                                                                       *M.pop()*
+                                `M.pop`({winid})
+Get next buffer on the window.
+Parameters~
+{winid} `(optional)` `(number)`
 
-- See https://github.com/towry/window-bufstack.nvim
+------------------------------------------------------------------------------
+                                                                *M.delete_buf()*
+                        `M.delete_buf`({bufnr}, {winid})
+Delete buf from stack
+Parameters~
+{bufnr} `(number)`
+{winid} `(optional)` `(number)`
+
+------------------------------------------------------------------------------
+                                                               *M.ignore_next()*
+                            `M.ignore_next`({winid})
+Ignore next income buffer, because it maybe being loaded into this window
+automatically and unwanted.
+For example, you can call this method before you run `:bdelete`, so the next
+auto loaded buffer can be ignored when we run pop.
+Parameters~
+{winid} `(optional)` `(number)`
+
+------------------------------------------------------------------------------
+                                                             *M.peek_bufstack()*
+                           `M.peek_bufstack`({winid})
+Peek next buf on the stack.
+Parameters~
+{winid} `(optional)` `(number)`
+
+------------------------------------------------------------------------------
+                                                                      *M.push()*
+                           `M.push`({bufnr}, {winid})
+Push a buffer onto the window
+Parameters~
+{bufnr} `(number)`
+{winid} `(optional)` `(number)`
+
+------------------------------------------------------------------------------
+                                                              *M.remove_stack()*
+                           `M.remove_stack`({winid})
+Parameters~
+{winid} `(number)`
+
+------------------------------------------------------------------------------
+                                                                     *M.debug()*
+                               `M.debug`({winid})
+Parameters~
+{winid} `(number)`
+
+
+ vim:tw=78:ts=8:noet:ft=help:norl:

@@ -1,0 +1,7 @@
+M.debug()	window-bufstack.txt	/*M.debug()*
+M.delete_buf()	window-bufstack.txt	/*M.delete_buf()*
+M.ignore_next()	window-bufstack.txt	/*M.ignore_next()*
+M.peek_bufstack()	window-bufstack.txt	/*M.peek_bufstack()*
+M.pop()	window-bufstack.txt	/*M.pop()*
+M.push()	window-bufstack.txt	/*M.push()*
+M.remove_stack()	window-bufstack.txt	/*M.remove_stack()*

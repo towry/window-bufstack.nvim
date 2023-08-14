@@ -42,7 +42,6 @@ function M.delete_buf(bufnr, winid)
   return deleted
 end
 
---- FIXME: what if next is the next buf that visited.
 --- Ignore next income buffer, because it maybe being loaded into this window
 --- automatically and unwanted.
 --- For example, you can call this method before you run `:bdelete`, so the next
