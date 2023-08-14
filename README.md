@@ -3,11 +3,12 @@
 Get next visited buf of given window, useful for choosing next buffer after closing a
 buffer in a window.
 
-Note:
+## Note:
 
-1. This plugin doesn't handle buffer management tasks like deletion or restoration; it simply records which buffers have been opened in a window.
-2. In my expectation, when I run :vsplit on a window and use bdelete to close the buffer in that window, the window should be closed because it only has one buffer visited. This plugin helps achieve this workflow.
-3. When you have the same buffer opened in two windows and you use bdelete to close one of them, you'll find that both windows are closed. This is the behavior of bdelete. You may want to use the Vim API to check if the buffer is opened in another window, so you can use a different command other than bdelete to remove the buffer from the window.
+1. This plugin doesn't handle buffer management like deletion or restoration; it simply records which buffers have been opened in a window.
+2. In my expectation, when I run `:vsplit` on a window and use bdelete to close the buffer in that window, the window should be closed because it only has one buffer visited. This plugin helps achieve this workflow.
+3. When you have the same buffer opened in two windows and you use `bdelete` to close one of them, you'll find that both windows are closed. This is the behavior of bdelete. You may want to use the Vim API to check if the buffer is opened in another window, so you can use a different command other than bdelete to remove the buffer from the window.
+4. `bdelete` will close window as well. see [delete buf without closing window](https://vim.fandom.com/wiki/Deleting_a_buffer_without_closing_the_window).
 
 ## Using
 
@@ -21,10 +22,13 @@ local plugin_spec = {
     {
       "<S-q>",
       function()
+          local MB = require('mini.bufremove')
           local bufstack = require('window-bufstack.bufstack')
           -- ignore next auto load buf because of `bdelete`.
           bufstack.ignore_next()
-          vim.cmd('bdelete')
+
+          --- delete buffer without closing window.
+          MB.delete(0)
 
           -- vim.print(bufstack.debug())
           local next_buf = bufstack.pop()

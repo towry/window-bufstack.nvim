@@ -78,12 +78,12 @@ function M.push(bufnr, winid)
   if not bufnr then
     bufnr = api.nvim_get_current_buf()
   end
-  local stack = session_windows[winid]
 
   local is_deleted = M.delete_buf(bufnr, winid)
+  local stack = session_windows[winid]
 
   local next = stack[#stack]
-  if next == INVALID_BUF_ID then
+  if next == INVALID_BUF_ID and bufnr ~= INVALID_BUF_ID then
     --- only replace if it has not visited before.
     if not is_deleted then
       bufnr = -(bufnr)
