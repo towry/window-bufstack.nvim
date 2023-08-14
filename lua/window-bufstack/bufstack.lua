@@ -2,6 +2,7 @@ local M = {}
 local session_windows = {}
 
 local api = vim.api
+local INVALID_BUF_ID = -1
 
 --- Get next buffer on the window.
 ---@param winid? number
@@ -16,10 +17,48 @@ function M.pop(winid)
     if not buf then
       return
     end
-    if api.nvim_buf_is_valid(buf) then
+    if buf > 0 and api.nvim_buf_is_valid(buf) then
       return buf
     end
   end
+end
+
+--- Delete buf from stack
+---@param bufnr number
+---@param winid? number
+function M.delete_buf(bufnr, winid)
+  if not winid then
+    winid = api.nvim_get_current_win()
+  end
+  local stack = session_windows[winid] or {}
+  for i, v in ipairs(stack) do
+    if v == bufnr then
+      table.remove(stack, i)
+      break;
+    end
+  end
+end
+
+--- Ignore next income buffer, because it maybe being loaded into this window
+--- automatically and unwanted.
+--- For example, you can call this method before you run `:bdelete`, so the next
+--- auto loaded buffer can be ignored when we run pop.
+---@param winid? number
+function M.ignore_next(winid)
+  M.push(INVALID_BUF_ID, winid)
+end
+
+--- Peek next buf on the stack.
+---@param winid? number
+function M.peek_bufstack(winid)
+  if not winid then
+    winid = api.nvim_get_current_win()
+  end
+
+  local stack = session_windows[winid]
+  if not stack then return end
+
+  return stack[#stack]
 end
 
 --- Push a buffer onto the window
@@ -36,10 +75,14 @@ function M.push(bufnr, winid)
     bufnr = api.nvim_get_current_buf()
   end
   local stack = session_windows[winid]
-  for i, v in ipairs(stack) do
-    if v == bufnr then
-      table.remove(stack, i)
-    end
+
+  M.delete_buf(bufnr, winid)
+
+  local next = stack[#stack]
+  if next == INVALID_BUF_ID then
+    bufnr = -(bufnr)
+    stack[#stack] = bufnr
+    return
   end
   table.insert(stack, bufnr)
 end
