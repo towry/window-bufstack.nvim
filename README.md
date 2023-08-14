@@ -5,24 +5,17 @@ buffer in a window.
 
 Note:
 
-1. This plugin doesn't handle buffer management like delete or restore, it just
-   record what buffer has been opened in a window.
-2. In my expectation, when I run `:vsplit` a window, and use `bdelete` to close
-   the buffer in that window, the window should be closed because it only have
-   one buffer visited it. This plugin helps to achive this workflow.
-3. When you have two same buffer opened in two window and you use `bdelete` to
-   close one of theme, you find both windows are closed, this is the behavior of
-   `bdelete`, you may want to use vim api to check if the buffer opened in
-   another window so you can use other command other than `bdelete` to remove
-   the buffer from the window.
+1. This plugin doesn't handle buffer management tasks like deletion or restoration; it simply records which buffers have been opened in a window.
+2. In my expectation, when I run :vsplit on a window and use bdelete to close the buffer in that window, the window should be closed because it only has one buffer visited. This plugin helps achieve this workflow.
+3. When you have the same buffer opened in two windows and you use bdelete to close one of them, you'll find that both windows are closed. This is the behavior of bdelete. You may want to use the Vim API to check if the buffer is opened in another window, so you can use a different command other than bdelete to remove the buffer from the window.
 
 ## Using
 
 ```lua
 local plugin_spec = {
   'towry/window-bufstack.nvim',
-  # currently no opts, buf setup call is needed.
-  # so you can also use config = true if you use lazy.nvim.
+  -- currently no opts, buf setup call is needed.
+  -- so you can also use config = true if you use lazy.nvim.
   opts = {},
   keys = {
     {
