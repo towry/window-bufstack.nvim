@@ -15,6 +15,9 @@ buffer in a window.
 ```lua
 local plugin_spec = {
   'towry/window-bufstack.nvim',
+  dependencies = {
+    'echasnovski/mini.bufremove'
+  },
   -- currently no opts, buf setup call is needed.
   -- so you can also use config = true if you use lazy.nvim.
   opts = {},
@@ -27,8 +30,13 @@ local plugin_spec = {
           -- ignore next auto load buf because of `bdelete`.
           bufstack.ignore_next()
 
-          --- delete buffer without closing window.
-          MB.delete(0)
+          --- buffer is displayed in other window.
+          if #vim.fn.win_findbuf(vim.fn.bufnr('%')) > 1 then
+            MB.unshow_in_window(0)
+          else
+            --- delete buffer without closing window.
+            MB.delete(0)
+          end
 
           -- vim.print(bufstack.debug())
           local next_buf = bufstack.pop()
