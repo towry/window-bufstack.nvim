@@ -55,6 +55,9 @@ local plugin_spec = {
 }
 ```
 
+Another useful tip is if you do not delete the buffer, you can cycle through
+visited buffers of current window.
+
 ## TODO
 
 - [ ] mark window as pinned?
