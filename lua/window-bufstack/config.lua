@@ -1,6 +1,9 @@
 local M = {}
 local state = nil
-local default_config = {}
+local default_config = {
+  --- File types to ignore
+  ignore_filetype = {},
+}
 
 M.require_init_after_config = false
 
@@ -10,9 +13,8 @@ M.config = setmetatable({}, {
       return default_config[key]
     end
     return state[key]
-  end
+  end,
 })
-
 
 function M.setup(options)
   local new_options = vim.tbl_deep_extend("force", default_config, options or {})

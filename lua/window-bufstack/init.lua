@@ -1,7 +1,8 @@
+local Config = require("window-bufstack.config").config
 local M = {}
 
 local function init_on_vim_start()
-  local bufstack = require('window-bufstack.bufstack')
+  local bufstack = require("window-bufstack.bufstack")
   local group = vim.api.nvim_create_augroup("window_bufstack_events", { clear = true })
 
   vim.api.nvim_create_autocmd("BufEnter", {
@@ -9,11 +10,14 @@ local function init_on_vim_start()
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
       local buf = args.buf
+      if vim.tbl_contains(Config.ignore_filetype, vim.bo[buf].filetype) then
+        return
+      end
       bufstack.push(buf, win)
     end,
   })
   -- BufUnload vs BufDelete ?
-  vim.api.nvim_create_autocmd('BufUnload', {
+  vim.api.nvim_create_autocmd("BufUnload", {
     group = group,
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
@@ -29,13 +33,13 @@ local function init_on_vim_start()
       if win then
         bufstack.remove_stack(win)
       end
-    end
+    end,
   })
 
   local winds = vim.api.nvim_list_wins()
   for _, win in ipairs(winds) do
     local buf = vim.api.nvim_win_get_buf(win)
-    local buftype = vim.api.nvim_get_option_value('buftype', { buf = buf })
+    local buftype = vim.api.nvim_get_option_value("buftype", { buf = buf })
     if buftype == "" then
       bufstack.push(buf, win)
     end
@@ -43,8 +47,8 @@ local function init_on_vim_start()
 end
 
 function M.setup(opts)
-  local config = require('window-bufstack.config')
-  if vim.v.vim_did_enter and (not vim.g.loaded_window_bufstack) then
+  local config = require("window-bufstack.config")
+  if vim.v.vim_did_enter and not vim.g.loaded_window_bufstack then
     config.require_init_after_config = true
     vim.g.loaded_window_bufstack = 1
   end
@@ -58,8 +62,8 @@ function M.init_on_vim_start()
   if vim.v.vim_did_enter then
     init_on_vim_start()
   else
-    vim.api.nvim_create_augroup('win_bufstack_init', { clear = true })
-    vim.api.nvim_create_autocmd('VimEnter', {
+    vim.api.nvim_create_augroup("win_bufstack_init", { clear = true })
+    vim.api.nvim_create_autocmd("VimEnter", {
       group = "win_bufstack_init",
       once = true,
       callback = init_on_vim_start,
