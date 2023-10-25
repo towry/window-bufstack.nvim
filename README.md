@@ -6,7 +6,7 @@ buffer in a window.
 ## Note:
 
 1. This plugin doesn't handle buffer management like deletion or restoration; it simply records which buffers have been opened in a window.
-2. In my expectation, when I run `:vsplit` on a window and use bdelete to close the buffer in that window, the window should be closed because it only has one buffer visited. This plugin helps achieve this workflow.
+2. In my expectation, when I run `:vsplit` on a window, and use bdelete to close the buffer in the splited window, the splited window should be closed because it only has one buffer visited. This plugin helps achieve this workflow.
 3. When you have the same buffer opened in two windows and you use `bdelete` to close one of them, you'll find that both windows are closed. This is the behavior of bdelete. You may want to use the Vim API to check if the buffer is opened in another window, so you can use a different command other than bdelete to remove the buffer from the window.
 4. `bdelete` will close window as well. see [delete buf without closing window](https://vim.fandom.com/wiki/Deleting_a_buffer_without_closing_the_window).
 
