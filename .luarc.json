@@ -6,5 +6,6 @@
       "$HOME/.local/share/nvim/lazy/plenary.nvim/lua",
       "./lua"
     ]
-  }
+  },
+    "workspace.checkThirdParty": "Disable"
 }

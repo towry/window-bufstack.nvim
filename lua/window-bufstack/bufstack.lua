@@ -53,7 +53,9 @@ end
 
 --- Peek next buf on the stack.
 ---@param winid? number
-function M.peek_bufstack(winid)
+---@param skip? number
+function M.peek_bufstack(winid, skip)
+  if not skip or type(skip) ~= 'number' then skip = 0 end
   if not winid then
     winid = api.nvim_get_current_win()
   end
@@ -61,7 +63,7 @@ function M.peek_bufstack(winid)
   local stack = session_windows[winid]
   if not stack then return end
 
-  return stack[#stack]
+  return stack[#stack - skip]
 end
 
 --- Push a buffer onto the window
