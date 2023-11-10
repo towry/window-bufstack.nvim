@@ -7,7 +7,7 @@ local INVALID_BUF_ID = -1
 --- Get next buffer on the window.
 ---@param winid? number
 function M.pop(winid)
-  if not winid then
+  if not winid or winid == 0 then
     winid = api.nvim_get_current_win()
   end
   local stack = session_windows[winid] or {}
@@ -27,7 +27,7 @@ end
 ---@param bufnr number
 ---@param winid? number
 function M.delete_buf(bufnr, winid)
-  if not winid then
+  if not winid or winid == 0 then
     winid = api.nvim_get_current_win()
   end
   local stack = session_windows[winid] or {}
@@ -56,7 +56,7 @@ end
 ---@param skip? number
 function M.peek_bufstack(winid, skip)
   if not skip or type(skip) ~= 'number' then skip = 0 end
-  if not winid then
+  if not winid or winid == 0 then
     winid = api.nvim_get_current_win()
   end
 
@@ -70,13 +70,13 @@ end
 ---@param bufnr number
 ---@param winid? number
 function M.push(bufnr, winid)
-  if not winid then
+  if not winid or winid == 0 then
     winid = api.nvim_get_current_win()
   end
   if not session_windows[winid] then
     session_windows[winid] = {}
   end
-  if not bufnr then
+  if not bufnr or bufnr == 0 then
     bufnr = api.nvim_get_current_buf()
   end
 
