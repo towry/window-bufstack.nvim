@@ -53,9 +53,10 @@ end
 
 --- Peek next buf on the stack.
 ---@param winid? number
----@param skip? number
-function M.peek_bufstack(winid, skip)
-  if not skip or type(skip) ~= 'number' then skip = 0 end
+---@param opts? {skip?:number, bottom?:boolean}
+function M.peek_bufstack(winid, opts)
+  opts = opts or {}
+  if not opts.skip or type(opts.skip) ~= 'number' then opts.skip = 0 end
   if not winid or winid == 0 then
     winid = api.nvim_get_current_win()
   end
@@ -63,13 +64,19 @@ function M.peek_bufstack(winid, skip)
   local stack = session_windows[winid]
   if not stack then return end
 
-  return stack[#stack - skip]
+  if opts.bottom == true then
+    return stack[1 + opts.skip]
+  end
+
+  return stack[#stack - opts.skip]
 end
 
 --- Push a buffer onto the window
 ---@param bufnr number
 ---@param winid? number
-function M.push(bufnr, winid)
+---@param opts? {bottom?: boolean}
+function M.push(bufnr, winid, opts)
+  opts = opts or {}
   if not winid or winid == 0 then
     winid = api.nvim_get_current_win()
   end
@@ -92,6 +99,12 @@ function M.push(bufnr, winid)
     stack[#stack] = bufnr
     return
   end
+  if opts.bottom then
+    -- insert to the bottom
+    table.insert(stack, 1, bufnr)
+    return
+  end
+
   table.insert(stack, bufnr)
 end
 
