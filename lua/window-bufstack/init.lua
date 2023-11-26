@@ -5,7 +5,19 @@ local function init_on_vim_start()
   local bufstack = require("window-bufstack.bufstack")
   local group = vim.api.nvim_create_augroup("window_bufstack_events", { clear = true })
 
-  vim.api.nvim_create_autocmd("BufEnter", {
+  --- for split
+  vim.api.nvim_create_autocmd("WinNew", {
+    group = group,
+    callback = function(args)
+      local win = vim.api.nvim_get_current_win()
+      local buf = args.buf
+      if vim.tbl_contains(Config.ignore_filetype, vim.bo[buf].filetype) then
+        return
+      end
+      bufstack.push(buf, win)
+    end
+  })
+  vim.api.nvim_create_autocmd("BufWinEnter", {
     group = group,
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
@@ -16,8 +28,7 @@ local function init_on_vim_start()
       bufstack.push(buf, win)
     end,
   })
-  -- BufUnload vs BufDelete ?
-  vim.api.nvim_create_autocmd("BufUnload", {
+  vim.api.nvim_create_autocmd("BufDelete", {
     group = group,
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
