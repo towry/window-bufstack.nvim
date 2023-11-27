@@ -16,13 +16,18 @@ local function init_on_vim_start()
   --- for split
   vim.api.nvim_create_autocmd("WinNew", {
     group = group,
-    callback = function(args)
+    callback = function()
       local win = vim.api.nvim_get_current_win()
-      local buf = args.buf
-      if is_buf_ignored(buf) then
-        return
-      end
-      bufstack.push(buf, win)
+      -- args.buf is not the buffer in new created window.
+      -- must use schedule_wrap, otherwise current buf is the
+      -- buffer in previous window.
+      vim.api.nvim_win_call(win, vim.schedule_wrap(function()
+        local buf = vim.api.nvim_get_current_buf()
+        if is_buf_ignored(buf) then
+          return
+        end
+        bufstack.push(buf, win)
+      end))
     end
   })
   vim.api.nvim_create_autocmd("BufWinEnter", {
