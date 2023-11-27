@@ -1,6 +1,14 @@
 local Config = require("window-bufstack.config").config
 local M = {}
 
+local function is_buf_ignored(bufnr)
+  if vim.bo[bufnr].buflisted == false then return true end
+  if vim.tbl_contains(Config.ignore_filetype, vim.bo[bufnr].filetype) then
+    return true
+  end
+  return false
+end
+
 local function init_on_vim_start()
   local bufstack = require("window-bufstack.bufstack")
   local group = vim.api.nvim_create_augroup("window_bufstack_events", { clear = true })
@@ -11,7 +19,7 @@ local function init_on_vim_start()
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
       local buf = args.buf
-      if vim.tbl_contains(Config.ignore_filetype, vim.bo[buf].filetype) then
+      if is_buf_ignored(buf) then
         return
       end
       bufstack.push(buf, win)
@@ -22,7 +30,7 @@ local function init_on_vim_start()
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
       local buf = args.buf
-      if vim.tbl_contains(Config.ignore_filetype, vim.bo[buf].filetype) then
+      if is_buf_ignored(buf) then
         return
       end
       bufstack.push(buf, win)
@@ -33,6 +41,7 @@ local function init_on_vim_start()
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
       local buf = args.buf
+      if is_buf_ignored(buf) then return end
       bufstack.delete_buf(buf, win)
     end,
   })
