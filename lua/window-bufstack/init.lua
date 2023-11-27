@@ -1,6 +1,12 @@
 local Config = require("window-bufstack.config").config
 local M = {}
 
+local function is_win_ignored(wid)
+  -- check window is float
+  if vim.api.nvim_win_get_config(wid).relative ~= "" then return true end
+  return false
+end
+
 local function is_buf_ignored(bufnr)
   if vim.bo[bufnr].buflisted == false then return true end
   if vim.tbl_contains(Config.ignore_filetype, vim.bo[bufnr].filetype) then
@@ -18,6 +24,7 @@ local function init_on_vim_start()
     group = group,
     callback = function()
       local win = vim.api.nvim_get_current_win()
+      if is_win_ignored(win) then return end
       -- args.buf is not the buffer in new created window.
       -- must use schedule_wrap, otherwise current buf is the
       -- buffer in previous window.
@@ -34,6 +41,7 @@ local function init_on_vim_start()
     group = group,
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
+      if is_win_ignored(win) then return end
       local buf = args.buf
       if is_buf_ignored(buf) then
         return
@@ -45,6 +53,7 @@ local function init_on_vim_start()
     group = group,
     callback = function(args)
       local win = vim.api.nvim_get_current_win()
+      if is_win_ignored(win) then return end
       local buf = args.buf
       if is_buf_ignored(buf) then return end
       bufstack.delete_buf(buf, win)
@@ -55,6 +64,7 @@ local function init_on_vim_start()
     pattern = "*",
     callback = function(info)
       local win = tonumber(info.match)
+      if is_win_ignored(win) then return end
       if win then
         bufstack.remove_stack(win)
       end
