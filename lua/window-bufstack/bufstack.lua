@@ -90,10 +90,12 @@ function M.push(bufnr, winid, opts)
   local is_deleted = M.delete_buf(bufnr, winid)
   local stack = session_windows[winid]
 
+  local has_been_added = is_deleted
   local next = stack[#stack]
   if next == INVALID_BUF_ID and bufnr ~= INVALID_BUF_ID then
-    --- only replace if it has not visited before.
-    if not is_deleted then
+    --- only replace if it has not been visited before.
+    if not has_been_added then
+      -- make bufnr invalid.
       bufnr = -(bufnr)
     end
     stack[#stack] = bufnr
