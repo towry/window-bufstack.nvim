@@ -3,6 +3,8 @@
 Get next visited buf of given window, useful for choosing next buffer after closing a
 buffer in a window.
 
+[Checkout the usage example](https://github.com/search?q=window-bufstack+repo%3Atowry%2Fnvim+language%3ALua&type=code)
+
 ## Note:
 
 1. This plugin doesn't handle buffer management like deletion or restoration; it simply records which buffers have been opened in a window.
